@@ -30,12 +30,12 @@ const Dashboard = ({ history }) => {
     }
   };
 
-  const showTask = slug => {
-    history.push(`/tasks/${slug}/show`);
-  };
-
   const updateTask = slug => {
     history.push(`/tasks/${slug}/edit`);
+  };
+
+  const showTask = slug => {
+    history.push(`/tasks/${slug}/show`);
   };
 
   useEffect(() => {
@@ -50,24 +50,24 @@ const Dashboard = ({ history }) => {
     );
   }
 
-  if (either(isNil, isEmpty)(tasks)) {
+  if (!either(isNil, isEmpty)(tasks)) {
     return (
       <Container>
-        <h1 className="text-xl leading-5 text-center">
-          You have no tasks assigned 😔
-        </h1>
+        <ListTasks
+          data={tasks}
+          destroyTask={destroyTask}
+          updateTask={updateTask}
+          showTask={showTask}
+        />
       </Container>
     );
   }
 
   return (
     <Container>
-      <ListTasks
-        data={tasks}
-        destroyTask={destroyTask}
-        updateTask={updateTask}
-        showTask={showTask}
-      />
+      <h1 className="text-xl leading-5 text-center">
+        You have no tasks assigned 😔
+      </h1>
     </Container>
   );
 };
