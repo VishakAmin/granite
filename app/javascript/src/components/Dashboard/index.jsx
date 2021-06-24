@@ -44,7 +44,7 @@ const Dashboard = ({ history }) => {
   return (
     <Container>
       <h1 className="text-xl leading-5 text-center">
-        You have no tasks assigned. Sorry ... 😔
+        You have no tasks assigned.. Sorry😔 😔
       </h1>
     </Container>
   );
