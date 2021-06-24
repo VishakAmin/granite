@@ -1,9 +1,15 @@
 class Task < ApplicationRecord
-  belongs_to :user
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :slug, uniqueness: true
   validate :slug_not_changed
+  # belongs_to :user
+  before_create :set_slug
+
+
+  def show
+    render status: :ok, json: { task: @task }
+  end
 
   private
 
@@ -15,6 +21,12 @@ class Task < ApplicationRecord
       break self.slug = slug_candidate unless Task.exists?(slug: slug_candidate)
       itr += 1
     end
+  end
+
+  def load_task
+    @task = Task.find_by_slug!(params[:slug])
+    rescue ActiveRecord::RecordNotFound => errors
+      render json: {errors: errors}
   end
 
   def slug_not_changed

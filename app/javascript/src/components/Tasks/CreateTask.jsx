@@ -12,7 +12,7 @@ const CreateTask = ({ history }) => {
     try {
       await tasksApi.create({ task: { title } });
       setLoading(false);
-      history.push("/");
+      history.push("/dashboard");
     } catch (error) {
       logger.error(error);
       setLoading(false);
