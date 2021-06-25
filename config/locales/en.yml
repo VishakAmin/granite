@@ -34,3 +34,7 @@ en:
   task:
     slug:
       immutable: "is immutable!"
+
+
+en:
+  successfully_created: "%{entity} was successfully created!"
