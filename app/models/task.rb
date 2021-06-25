@@ -3,12 +3,16 @@ class Task < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
   validates :slug, uniqueness: true
   validate :slug_not_changed
-  # belongs_to :user
+  belongs_to :user
   before_create :set_slug
 
 
   def show
-    render status: :ok, json: { task: @task }
+    task_creator = User.find(@task.creator_id).name
+    render status: :ok, json: { task: @task,
+                              assigned_user: @task.user,
+                              task_creator: task_creator }
+
   end
 
   private
