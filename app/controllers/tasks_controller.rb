@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :authenticate_user_using_x_auth_token, except: [:new, :edit]
+  before_action :authenticate_user_using_x_auth_token
   before_action :load_task, only: %i[show update destroy]
 
   def index
@@ -12,15 +12,13 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = Task.new(task_params.merge(creator_id: @current_user.id))
     if @task.save
-      render status: :ok, json: { notice: t('successfully_created', entity: 'Task') }
+      render status: :ok, json: { notice: t('successfully_created', 'Task') }
     else
-      errors = @task.errors.full_messages
-      render status: :unprocessable_entity, json: { errors: errors  }
+      errors = @task.errors.full_messages.to_sentence
+      render status: :unprocessable_entity, json: { errors: errors }
     end
-  rescue ActiveRecord::RecordNotUnique => e
-    render status: :unprocessable_entity, json: { errors: e.message }
   end
 
   def update
@@ -43,7 +41,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :user_id)
+    params.require(:task).permit(:title)
   end
 
   def load_task
