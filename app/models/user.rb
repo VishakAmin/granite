@@ -4,8 +4,10 @@ class User < ApplicationRecord
   has_many :tasks, dependent: :destroy
 
   has_secure_password
+  has_secure_token :authentication_token
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true, on: :create
+
 
   validates :email, presence: true,
                     uniqueness: true,
