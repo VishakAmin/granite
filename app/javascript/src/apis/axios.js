@@ -1,7 +1,11 @@
 import axios from "axios";
 import Toastr from "../components/Common/Toastr";
+import { setToLocalStorage } from "helpers/storage";
 
-// axios.defaults.baseURL = "/";
+axios.defaults.headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+};
 
 export const setAuthHeaders = (setLoading = () => null) => {
   axios.defaults.headers = {
@@ -11,13 +15,18 @@ export const setAuthHeaders = (setLoading = () => null) => {
       .querySelector('[name="csrf-token"]')
       .getAttribute("content"),
   };
-  const token = JSON.parse(localStorage.getItem("authToken"));
-  const email = JSON.parse(localStorage.getItem("authEmail"));
+  const token = localStorage.getItem("authToken");
+  const email = localStorage.getItem("authEmail");
   if (token && email) {
     axios.defaults.headers["X-Auth-Email"] = email;
     axios.defaults.headers["X-Auth-Token"] = token;
   }
   setLoading(false);
+};
+
+export const resetAuthTokens = () => {
+  delete axios.defaults.headers["X-Auth-Email"];
+  delete axios.defaults.headers["X-Auth-Token"];
 };
 
 const handleSuccessResponse = response => {
@@ -51,9 +60,4 @@ export const registerIntercepts = () => {
   axios.interceptors.response.use(handleSuccessResponse, error =>
     handleErrorResponse(error)
   );
-};
-
-export const resetAuthTokens = () => {
-  delete axios.defaults.headers["X-Auth-Email"];
-  delete axios.defaults.headers["X-Auth-Token"];
 };

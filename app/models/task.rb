@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   validate :slug_not_changed
   belongs_to :user
   before_create :set_slug
+  has_many :comments, dependent: :destroy
 
 
   def show
