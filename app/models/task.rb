@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   validate :slug_not_changed
   belongs_to :user
   enum progress: { pending: 0, completed: 1 }
+  enum status: { unstarred: 0, starred: 1 }
   before_create :set_slug
   has_many :comments, dependent: :destroy
 
@@ -38,4 +39,11 @@ class Task < ApplicationRecord
       errors.add(:slug, t('task.slug.immutable'))
     end
   end
+
+  def self.organize(progress)
+    starred = send(progress).starred.order('updated_at DESC')
+    unstarred = send(progress).unstarred
+    starred + unstarred
+  end
+  
 end
