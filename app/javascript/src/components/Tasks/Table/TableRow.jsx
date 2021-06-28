@@ -1,51 +1,52 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { compose, head, join, juxt, tail, toUpper } from "ramda";
 
-const TableRow = ({ data, destroyTask, updateTask, showTask }) => {
+const TableHeader = ({ type }) => {
+  const getTitleCase = compose(join(""), juxt([compose(toUpper, head), tail]));
+  const title = `${getTitleCase(type)} Tasks`;
+
   return (
-    <tbody className="bg-white divide-y divide-gray-200">
-      {data.map(rowData => (
-        <tr key={rowData.id}>
-          <td className="px-6 py-4 text-sm font-medium leading-5 text-bb-gray whitespace-no-wrap">
-            {rowData.title}
-          </td>
-          <td className="px-6 py-4 text-sm font-medium leading-5 text-bb-gray whitespace-no-wrap">
-            {rowData.user_id}
-          </td>
-          <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
-            <a
-              className="text-bb-purple"
-              onClick={() => showTask(rowData.slug)}
-            >
-              Show
-            </a>
-          </td>
-          <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
-            <a
-              className="text-yellow-600 hover:text-yellow-900"
-              onClick={() => updateTask(rowData.slug)}
-            >
-              Edit
-            </a>
-          </td>
-          <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
-            <a
-              className="text-bb-red text-opacity-70 hover:text-opacity-100"
-              onClick={() => destroyTask(rowData.slug)}
+    <thead>
+      <tr>
+        <th className="w-1"></th>
+        <th
+          className="px-6 py-3 text-xs font-bold leading-4 tracking-wider
+        text-left text-bb-gray-600 text-opacity-50 uppercase bg-gray-50"
+        >
+          {title}
+        </th>
+        {type === "pending" && (
+          <th
+            className="px-6 py-3 text-sm font-bold leading-4 tracking-wider
+        text-left text-bb-gray-600 text-opacity-50 bg-gray-50"
+          >
+            Assigned To
+          </th>
+        )}
+        {type === "completed" && (
+          <>
+            <th style={{ width: "164px" }}></th>
+            <th
+              className="pl-6 py-3 text-sm font-bold leading-4
+            tracking-wider text-center text-bb-gray-600
+            text-opacity-50 bg-gray-50"
             >
               Delete
-            </a>
-          </td>
-        </tr>
-      ))}
-    </tbody>
+            </th>
+          </>
+        )}
+        {type === "pending" && (
+          <th
+            className="pl-6 py-3 text-sm font-bold leading-4
+          tracking-wider text-center text-bb-gray-600
+          text-opacity-50 bg-gray-50"
+          >
+            Starred
+          </th>
+        )}
+      </tr>
+    </thead>
   );
 };
 
-TableRow.propTypes = {
-  data: PropTypes.array.isRequired,
-  destroyTask: PropTypes.func,
-  updateTask: PropTypes.func,
-};
-
-export default TableRow;
+export default TableHeader;

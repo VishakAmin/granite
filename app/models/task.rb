@@ -4,16 +4,15 @@ class Task < ApplicationRecord
   validates :slug, uniqueness: true
   validate :slug_not_changed
   belongs_to :user
+  enum progress: { pending: 0, completed: 1 }
   before_create :set_slug
   has_many :comments, dependent: :destroy
-
 
   def show
     task_creator = User.find(@task.creator_id).name
     render status: :ok, json: { task: @task,
                               assigned_user: @task.user,
                               task_creator: task_creator }
-
   end
 
   private
