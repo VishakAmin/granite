@@ -110,6 +110,8 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.8)
       nio4r (~> 2.0)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-proxy (0.7.0)
@@ -215,6 +217,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.2)
   puma (~> 4.1)
+  pundit
   rails (~> 6.0.3, >= 6.0.3.4)
   react-rails
   sass-rails (>= 6)
