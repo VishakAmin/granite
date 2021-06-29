@@ -45,4 +45,61 @@ class TaskTest < ActiveSupport::TestCase
     end
   end
 
+  def test_task_should_not_be_valid_without_title
+    @task.title = ''
+    assert @task.invalid?
+  end
+
+
+  def test_task_slug_is_parameterized_title
+    title = @task.title
+    @task.save!
+    assert_equal title.parameterize, @task.slug
+  end
+
+  def test_incremental_slug_generation_for_tasks_with_same_title
+    first_task = Task.create!(title: 'test task', user: @user)
+    second_task = Task.create!(title: 'test task', user: @user)
+  
+    assert_equal 'test-task', first_task.slug
+    assert_equal 'test-task-2', second_task.slug
+  end
+
+  def test_error_raised_for_duplicate_slug
+    test_task = Task.create!(title: 'test task', user: @user)
+    another_test_task = Task.create!(title: 'anoter test task', user: @user)
+  
+    test_task_tile = test_task.title
+    assert_raises ActiveRecord::RecordInvalid do
+      another_test_task.update!(slug: test_task_tile.parameterize)
+    end
+  
+    assert_match t('task.slug.immutable'),
+                  another_test_task.errors.full_messages.to_sentence
+  end
+
+  def test_updating_title_does_not_update_slug
+    @task.save!
+    task_slug = @task.slug
+  
+    updated_task_title = 'updated task tile'
+    @task.update!(title: updated_task_title)
+  
+    assert_equal updated_task_title, @task.title
+  
+    assert_equal task_slug, @task.slug
+  end
+
+  def test_slug_to_be_reused_after_getting_deleted
+    first_task = Task.create!(title: 'test task', user: @user)
+    second_task = Task.create!(title: 'test task', user: @user)
+  
+    second_task_slug = second_task.slug
+    second_task.destroy
+    new_task_with_same_title = Task.create!(title: 'test task', user: @user)
+  
+    assert_equal second_task_slug, new_task_with_same_title.slug
+  end
+  
+
 end
