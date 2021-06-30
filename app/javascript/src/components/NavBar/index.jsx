@@ -36,6 +36,8 @@ const NavBar = () => {
                 path="/tasks/create"
               />
             </div>
+            <NavItem name="Preferences" path="/my/preferences" />
+            ``{" "}
           </div>
           <div className="flex items-center justify-end gap-x-4">
             <span

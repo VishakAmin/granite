@@ -7,15 +7,14 @@ const Input = ({
   value,
   onChange,
   placeholder,
+  min,
+  max,
   required = true,
 }) => {
   return (
     <div className="mt-6">
       {label && (
-        <label
-          className="block text-sm font-medium
-              leading-5 text-bb-gray-700"
-        >
+        <label className="block text-sm font-medium leading-5 text-bb-gray-700">
           {label}
         </label>
       )}
@@ -26,11 +25,11 @@ const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="block w-full px-3 py-2 placeholder-gray-400
-          transition duration-150 ease-in-out border
-          border-gray-300 rounded-md appearance-none
-          focus:outline-none focus:shadow-outline-blue
-          focus:border-blue-300 sm:text-sm sm:leading-5"
+          min={min}
+          max={max}
+          className="block w-full px-3 py-2 placeholder-gray-400 transition duration-150
+          ease-in-out border border-gray-300 rounded-md appearance-none focus:outline-none
+          focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
         />
       </div>
     </div>
@@ -44,6 +43,8 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   required: PropTypes.bool,
+  min: PropTypes.number,
+  max: PropTypes.number,
 };
 
 export default Input;

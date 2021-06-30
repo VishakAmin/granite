@@ -8,6 +8,7 @@ class Task < ApplicationRecord
   enum status: { unstarred: 0, starred: 1 }
   before_create :set_slug
   has_many :comments, dependent: :destroy
+  after_create :log_task_details
 
   def show
     task_creator = User.find(@task.creator_id).name
@@ -46,4 +47,8 @@ class Task < ApplicationRecord
     starred + unstarred
   end
   
+  def log_task_details
+    TaskLoggerJob.perform_later(self)
+  end
+
 end

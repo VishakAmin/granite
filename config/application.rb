@@ -7,9 +7,12 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Granite
+  # Initialize configuration defaults for originally generated Rails version.
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    config.active_job.queue_adapter = :sidekiq
+    Redis.exists_returns_integer = false
+
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

@@ -56,3 +56,10 @@ gem 'react-rails'
 gem 'bcrypt', '~> 3.1.13'
 
 gem "pundit"
+
+gem "sidekiq"
+
+gem "sidekiq-cron"
+
+gem "letter_opener", :group => :development
+
